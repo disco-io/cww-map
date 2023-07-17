@@ -1,0 +1,184 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <title>ArcGIS Maps SDK for JavaScript</title>
+
+    <style>
+      html,
+      body,
+      #viewDiv {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+      }
+    </style>
+
+    <link rel="stylesheet" href="https://js.arcgis.com/4.27/esri/themes/light/main.css">
+    <script src="https://js.arcgis.com/4.27/"></script>
+
+    <script>
+     require([
+      "esri/config",
+      "esri/Map",
+      "esri/views/MapView",
+      "esri/widgets/BasemapToggle",
+      "esri/widgets/BasemapGallery",
+      "esri/widgets/Bookmarks",
+       "esri/widgets/Expand",
+      "esri/widgets/Search",
+      "esri/layers/FeatureLayer",
+      "esri/widgets/Popup",
+      "esri/Graphic"
+
+    ], function(esriConfig, Map, MapView, BasemapToggle, BasemapGallery, Bookmarks, Expand, Search, FeatureLayer, Popup, Graphic) {
+
+      esriConfig.apiKey = "AAPKae673c6809df470f95ee8b75b09a25ffrgMyhyBuUYUqrQOwRDjuNS8QSzgyVIQKo2nnbmh4u-WVAWNnufIBa7a_ySjV5vSd";
+
+      const map = new Map({
+        basemap: "arcgis-topographic"
+      });
+
+   const view = new MapView({
+          map: map,
+          center: [-76.1050, 37.5214], // Longitude, latitude
+          zoom: 8.5, // Zoom level
+          container: "viewDiv" // Div element
+        });
+       
+const search = new Search({  //Add Search widget
+      view: view
+    });
+
+    view.ui.add(search, "top-right"); //Add to the map
+
+    const DocksLayer = new FeatureLayer({
+    url: "https://services4.arcgis.com/tkyK8zdXvrUIsEhE/arcgis/rest/services/CWW_PART_THREE_WFL1/FeatureServer",
+    outFields: ["*"],
+    popupTemplate: {
+      title: "{Dock_Name}",
+      content: [{
+        type: "fields",
+        fieldInfos: [
+          {
+            fieldName: "Site Name",
+            label: "Site Name"
+          },
+          {
+            fieldName: "Grade",
+            label: "Grade"
+          },
+          {
+            fieldName: "County",
+            label: "County"
+          },
+          {
+            fieldName: "Water Body",
+            label: "Water Body"
+          },
+          {
+            fieldName: "Physical Address",
+            label: "Physical Address",
+          },
+          {
+            fieldName: "Hours",
+            label: "Hours"
+          },
+          {
+            fieldName: "Fee Or Permit Required",
+            label: "Fee or Permit Required"
+          },
+          { 
+            fieldName: "Contact Name",
+            label: "Contact Name"
+          },
+          { 
+            fieldName: "Owner Manager Facility Name",
+            label: "Owner or Manager Facility Name"
+          },
+          { 
+            fieldName: "Owner Manager Phone", 
+            label: "Owner Or Manager Phone"
+          },
+          {
+            fieldName: "Website",
+            label: "Website"
+          },
+          {
+            fieldName: "Directions",
+            label: "Directions"
+          },
+          {
+            fieldName: "Comments",
+            label: "Comments"
+          },
+          {
+            fieldName: "Questions And Updates",
+            label: "Questions & Updates"
+          },
+        ]
+      }]
+    }
+  });
+       map.add(DocksLayer);
+
+       DocksLayer.when(() => {
+         view.goTo(DocksLayer.fullExtent);
+       });
+
+        view.whenLayerView(DocksLayer).then((layerView) => {
+          layerView.watch("updating", (val) => {
+            if (!val) {
+              layerView.queryFeatures().then((results) => {
+                results.forEach((feature) => {
+                  feature.popupTemplate = DocksLayer.popupTemplate;
+                  feature.popupTemplate.title = feature.attributes.Dock_Name;
+                });
+              });
+            }
+          });
+        });
+      
+       const basemapGallery = new BasemapGallery({
+        view: view,
+        source: {
+          query: {
+            title: '"World Basemaps for Developers" AND owner:esri'
+          }
+        }
+      });
+       const bgExpand = new Expand({
+          view: view,
+          content: basemapGallery
+        });
+       
+     
+        view.ui.add(bgExpand, "bottom-right"); // Add to the view
+
+   const bookmarks = new Bookmarks({
+          view: view,
+          // allows bookmarks to be added, edited, or deleted
+          editingEnabled: true,
+          visibleElements: {
+          }
+        });
+               const bkExpand = new Expand({
+          view: view,
+          content: bookmarks,
+        })
+
+        // Add the widget to the top-right corner of the view
+        view.ui.add(bkExpand, "top-right");
+      });
+      
+   //function queryFeatures()
+
+      
+    </script>
+
+  </head>
+  <body>
+    <div id="viewDiv"></div>
+  </body>
+</html>
