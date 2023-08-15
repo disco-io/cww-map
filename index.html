@@ -48,9 +48,7 @@
 
         ], function (esriConfig, Map, MapView, BasemapToggle, BasemapGallery, Bookmarks, Expand, Search, FeatureLayer, Popup, Graphic, ScaleBar, Sketch, GraphicsLayer, geometryEngine, Legend) {
 
-            esriConfig.apiKey = "AAPKae673c6809df470f95ee8b75b09a25ffrgMyhyBuUYUqrQOwRDjuNS8QSzgyVIQKo2nnbmh4u-WVAWNnufIBa7a_ySjV5vSd";
-
-
+            esriConfig.apiKey = "SECRET_TOKEN"
             const map = new Map({
                 basemap: "arcgis-topographic" //Basemap layer service
             });
@@ -80,11 +78,29 @@
                     "height": "18px"
                 }
             }
+            const GradeB = {
+                "type": "simple",
+                "symbol": {
+                    color: "yellow",
+                    "type": "simple-marker",
+                    "width": "18px",
+                    "height": "18px"
+                }
+            }
+            const GradeC = {
+                "type": "simple",
+                "symbol": {
+                    color: "red",
+                    "type": "simple-marker",
+                    "width": "18px",
+                    "height": "18px"
+                }
+            }
 
             // Create the layer and set the renderer
             const layer = new FeatureLayer({
-                url: "https://services4.arcgis.com/tkyK8zdXvrUIsEhE/arcgis/rest/services/CWW_PART_THREE_WFL1/FeatureServer",
-                renderer: GradeA,
+                url: "https://services4.arcgis.com/tkyK8zdXvrUIsEhE/arcgis/rest/services/CWW_MAP_PART_2_WFL1/FeatureServer",
+                renderer: GradeB,
                 outFields: ["*"],
                 popupTemplate: {
                     title: "{Site_Name}",
@@ -282,6 +298,7 @@
             const search = new Search({ //Add Search widget
                 view: view
             });
+          
             view.ui.add(search, "top-right");
             //view.ui.add(legend, "bottom-left");
             view.ui.add("optionsDiv", "top-right");//Add to the map
