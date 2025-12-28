@@ -12,6 +12,22 @@ ArcGIS JavaScript is a powerful web mapping technology that enables developers t
 
 ## How It Works
 
+<p float="left">
+  <img src="Query.png" width="45%" />
+  <img src="Popups.png" width="45%" />
+</p>
+
+Users can limit their search radius to between 5 and 25 miles around a chosen location, and the map displays results accordingly. Popups provide convenient access to detailed site information, including:
+
+- **Site Name**  
+- **Dock Grade**  
+- **Contact Information**  
+- **Google Maps Directions**  
+- **Parking Information**  
+- **Coordinates**
+- and more
+
+Additionally, station maintainers can update their dock information via a comma-separated Google Spreadsheet. Changes are reflected in real time, requiring no coding, making the system intuitive and user-friendly.
 
 ---
 
